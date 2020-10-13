@@ -1,9 +1,20 @@
 package com.bridgelabz.hotelreservation;
 
+import java.util.ArrayList;
+
 public class HotelReservation {
 
-	public static void main(String[] args) {
-		System.out.println("Welcome to Hotel Reservation Program");
+	private ArrayList<Hotel> hotelList = new ArrayList<>();
+
+	public ArrayList<Hotel> getHotelList() {
+		return hotelList;
 	}
 
+	public void setHotelList(ArrayList<Hotel> hotelList) {
+		this.hotelList = hotelList;
+	}
+
+	public void addHotelToList(Hotel hotel) {
+		hotelList.add(hotel);
+	}
 }
