@@ -46,18 +46,24 @@ public class HotelReservationMain {
 			Long totalRate = weekdays * hotel.getWeekDayRate() + weekends * hotel.getWeekendRate();
 			hotel.setTotalRate(totalRate);
 		}
-		List<Hotel> sortedHotelList = hotelObj.getHotelList().stream()
+		List<Hotel> sortedHotelListOnRate = hotelObj.getHotelList().stream()
 				.sorted(Comparator.comparing(Hotel::getTotalRate)).collect(Collectors.toList());
-
-		Hotel cheapestHotel = sortedHotelList.get(0); 
-		long lowestPrice = sortedHotelList.get(0).getTotalRate();
-		double rating = sortedHotelList.get(0).getRating();
+		List<Hotel> sortedHotelListOnRating = hotelObj.getHotelList().stream()
+				.sorted(Comparator.comparing(Hotel::getRating)).collect(Collectors.toList());
+		Hotel cheapestHotel = sortedHotelListOnRate.get(0); 
+		Hotel bestRatedHotel = sortedHotelListOnRating.get(2); 
+		System.out.println("Best Rated hotel is " + bestRatedHotel.getHotelName() + ", Rating " + bestRatedHotel.getRating()
+		+ " with total rate $ " + bestRatedHotel.getTotalRate());
+		long lowestPrice = sortedHotelListOnRate.get(0).getTotalRate();
+		double rating = sortedHotelListOnRate.get(0).getRating();
 		for (Hotel hotel : hotelObj.getHotelList()) {
 			if (hotel.getTotalRate() <= lowestPrice && hotel.getRating() > rating)
 				cheapestHotel = hotel;
 		}
 		return cheapestHotel;
 	}
+	
+	
 
 	public static void main(String[] args) {
 		System.out.println("Welcome to the Hotel Reservation System");
@@ -69,10 +75,11 @@ public class HotelReservationMain {
 		System.out.println("Enter the check out date in ddMMMYYYY format");
 		String endDate = sc.next();
 		Hotel cheapestHotel = null;
+		Hotel bestRatedHotel = null;
 		try {
 			cheapestHotel = findCheapestHotel(startDate, endDate);
 			System.out.println("Cheapest hotel is " + cheapestHotel.getHotelName() + ", Rating " + cheapestHotel.getRating()
-					+ " with total rate $ " + cheapestHotel.getTotalRate());
+			+ " with total rate $ " + cheapestHotel.getTotalRate());
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
