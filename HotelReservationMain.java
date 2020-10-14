@@ -21,7 +21,7 @@ public class HotelReservationMain {
 		hotelObj.addHotelToList(ridgeWood);
 		hotelObj.getHotelList().stream().forEach((hotelList) -> System.out.println(hotelList));
 	}
-
+    //finding cheapest hotel for a given date range
 	public static Hotel findCheapestHotel(String start, String end) throws ParseException {
 		Date startDate = null, endDate = null;
 		SimpleDateFormat formatter = new SimpleDateFormat("ddMMMyyyy");
@@ -50,6 +50,6 @@ public class HotelReservationMain {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		System.out.println(cheapestHotel.getHotelName() + "'s total rate is $ " + cheapestHotel.getTotalRate());
+		System.out.println("Cheapest hotel is "+ cheapestHotel.getHotelName() + " whose total rate is $ " + cheapestHotel.getTotalRate());
 	}
 }
