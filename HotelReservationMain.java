@@ -14,9 +14,9 @@ public class HotelReservationMain {
 
 	// Adding hotel details
 	public static void addHotelForRegularCustomer() {
-		Hotel lakeWood = new Hotel("LakeWood", 110, 90);
-		Hotel bridgeWood = new Hotel("BridgeWood", 160, 60);
-		Hotel ridgeWood = new Hotel("RidgeWood", 220, 150);
+		Hotel lakeWood = new Hotel("LakeWood", 110, 90, 3);
+		Hotel bridgeWood = new Hotel("BridgeWood", 160, 60, 4);
+		Hotel ridgeWood = new Hotel("RidgeWood", 220, 150, 5);
 		hotelObj.addHotelToList(lakeWood);
 		hotelObj.addHotelToList(bridgeWood);
 		hotelObj.addHotelToList(ridgeWood);
