@@ -1,5 +1,6 @@
 package com.bridgelabz.hotelreservation;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
@@ -21,19 +22,33 @@ public class HotelReservationMain {
 		hotelObj.addHotelToList(ridgeWood);
 		hotelObj.getHotelList().stream().forEach((hotelList) -> System.out.println(hotelList));
 	}
-    //finding cheapest hotel for a given date range
+
+	// finding cheapest hotel for a given date range
 	public static Hotel findCheapestHotel(String start, String end) throws ParseException {
 		Date startDate = null, endDate = null;
 		SimpleDateFormat formatter = new SimpleDateFormat("ddMMMyyyy");
 		startDate = formatter.parse(start);
 		endDate = formatter.parse(end);
 		long dateRange = 1 + (endDate.getTime() - startDate.getTime()) / 1000 / 60 / 60 / 24;
-		Hotel cheapestHotel = hotelObj.getHotelList().stream().sorted(Comparator.comparing(Hotel::getWeekDayRate))
+		DateFormat day = new SimpleDateFormat("EE");
+		String startDay = day.format(startDate);
+		String endDay = day.format(endDate);
+		long weekends = 0;
+		if (startDay.equalsIgnoreCase("sat") || startDay.equalsIgnoreCase("sun")) {
+			weekends++;
+		}
+		if (endDay.equalsIgnoreCase("sat") || endDay.equalsIgnoreCase("sun")) {
+			weekends++;
+		}
+		Long weekdays = dateRange - weekends;
+		for (Hotel hotel : hotelObj.getHotelList()) {
+			Long totalRate = weekdays * hotel.getWeekDayRate() + weekends * hotel.getWeekendRate();
+			hotel.setTotalRate(totalRate);
+		}
+		Hotel cheapestHotel = hotelObj.getHotelList().stream().sorted(Comparator.comparing(Hotel::getTotalRate))
 				.findFirst().orElse(null);
-		long totalRate = dateRange * cheapestHotel.getWeekDayRate();
-		cheapestHotel.setTotalRate(totalRate);
 		return cheapestHotel;
-	} 
+	}
 
 	public static void main(String[] args) {
 		System.out.println("Welcome to the Hotel Reservation System");
@@ -47,9 +62,10 @@ public class HotelReservationMain {
 		Hotel cheapestHotel = null;
 		try {
 			cheapestHotel = findCheapestHotel(startDate, endDate);
+			System.out.println("Cheapest hotel is " + cheapestHotel.getHotelName() + " with total rate $ "
+					+ cheapestHotel.getTotalRate());
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Cheapest hotel is "+ cheapestHotel.getHotelName() + " whose total rate is $ " + cheapestHotel.getTotalRate());
 	}
 }
