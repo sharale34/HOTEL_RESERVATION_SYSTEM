@@ -15,9 +15,9 @@ public class HotelReservationMain {
 
 	// Adding hotel details
 	public static void addHotelForRegularCustomer() {
-		Hotel lakeWood = new Hotel("LakeWood", 110, 90, 3);
-		Hotel bridgeWood = new Hotel("BridgeWood", 150, 50, 4);
-		Hotel ridgeWood = new Hotel("RidgeWood", 220, 150, 5);
+		Hotel lakeWood = new Hotel("LakeWood", 110, 90, 80, 80, 3);
+		Hotel bridgeWood = new Hotel("BridgeWood", 150, 50, 110, 50, 4);
+		Hotel ridgeWood = new Hotel("RidgeWood", 220, 150, 100, 40, 5);
 		hotelObj.addHotelToList(lakeWood);
 		hotelObj.addHotelToList(bridgeWood);
 		hotelObj.addHotelToList(ridgeWood);
@@ -50,10 +50,10 @@ public class HotelReservationMain {
 				.sorted(Comparator.comparing(Hotel::getTotalRate)).collect(Collectors.toList());
 		List<Hotel> sortedHotelListOnRating = hotelObj.getHotelList().stream()
 				.sorted(Comparator.comparing(Hotel::getRating)).collect(Collectors.toList());
-		Hotel cheapestHotel = sortedHotelListOnRate.get(0); 
-		Hotel bestRatedHotel = sortedHotelListOnRating.get(2); 
-		System.out.println("Best Rated hotel is " + bestRatedHotel.getHotelName() + ", Rating " + bestRatedHotel.getRating()
-		+ " with total rate $ " + bestRatedHotel.getTotalRate());
+		Hotel cheapestHotel = sortedHotelListOnRate.get(0);
+		Hotel bestRatedHotel = sortedHotelListOnRating.get(2);
+		System.out.println("Best Rated hotel is " + bestRatedHotel.getHotelName() + ", Rating "
+				+ bestRatedHotel.getRating() + " with total rate $ " + bestRatedHotel.getTotalRate());
 		long lowestPrice = sortedHotelListOnRate.get(0).getTotalRate();
 		double rating = sortedHotelListOnRate.get(0).getRating();
 		for (Hotel hotel : hotelObj.getHotelList()) {
@@ -62,8 +62,6 @@ public class HotelReservationMain {
 		}
 		return cheapestHotel;
 	}
-	
-	
 
 	public static void main(String[] args) {
 		System.out.println("Welcome to the Hotel Reservation System");
@@ -75,11 +73,10 @@ public class HotelReservationMain {
 		System.out.println("Enter the check out date in ddMMMYYYY format");
 		String endDate = sc.next();
 		Hotel cheapestHotel = null;
-		Hotel bestRatedHotel = null;
 		try {
 			cheapestHotel = findCheapestHotel(startDate, endDate);
-			System.out.println("Cheapest hotel is " + cheapestHotel.getHotelName() + ", Rating " + cheapestHotel.getRating()
-			+ " with total rate $ " + cheapestHotel.getTotalRate());
+			System.out.println("Cheapest hotel is " + cheapestHotel.getHotelName() + ", Rating "
+					+ cheapestHotel.getRating() + " with total rate $ " + cheapestHotel.getTotalRate());
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
