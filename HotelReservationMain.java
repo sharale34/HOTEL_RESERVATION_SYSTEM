@@ -5,8 +5,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Formatter;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class HotelReservationMain {
 
@@ -15,7 +16,7 @@ public class HotelReservationMain {
 	// Adding hotel details
 	public static void addHotelForRegularCustomer() {
 		Hotel lakeWood = new Hotel("LakeWood", 110, 90, 3);
-		Hotel bridgeWood = new Hotel("BridgeWood", 160, 60, 4);
+		Hotel bridgeWood = new Hotel("BridgeWood", 150, 50, 4);
 		Hotel ridgeWood = new Hotel("RidgeWood", 220, 150, 5);
 		hotelObj.addHotelToList(lakeWood);
 		hotelObj.addHotelToList(bridgeWood);
@@ -45,8 +46,16 @@ public class HotelReservationMain {
 			Long totalRate = weekdays * hotel.getWeekDayRate() + weekends * hotel.getWeekendRate();
 			hotel.setTotalRate(totalRate);
 		}
-		Hotel cheapestHotel = hotelObj.getHotelList().stream().sorted(Comparator.comparing(Hotel::getTotalRate))
-				.findFirst().orElse(null);
+		List<Hotel> sortedHotelList = hotelObj.getHotelList().stream()
+				.sorted(Comparator.comparing(Hotel::getTotalRate)).collect(Collectors.toList());
+
+		Hotel cheapestHotel = sortedHotelList.get(0); 
+		long lowestPrice = sortedHotelList.get(0).getTotalRate();
+		double rating = sortedHotelList.get(0).getRating();
+		for (Hotel hotel : hotelObj.getHotelList()) {
+			if (hotel.getTotalRate() <= lowestPrice && hotel.getRating() > rating)
+				cheapestHotel = hotel;
+		}
 		return cheapestHotel;
 	}
 
@@ -62,8 +71,8 @@ public class HotelReservationMain {
 		Hotel cheapestHotel = null;
 		try {
 			cheapestHotel = findCheapestHotel(startDate, endDate);
-			System.out.println("Cheapest hotel is " + cheapestHotel.getHotelName() + " with total rate $ "
-					+ cheapestHotel.getTotalRate());
+			System.out.println("Cheapest hotel is " + cheapestHotel.getHotelName() + ", Rating " + cheapestHotel.getRating()
+					+ " with total rate $ " + cheapestHotel.getTotalRate());
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
