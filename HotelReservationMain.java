@@ -85,7 +85,7 @@ public class HotelReservationMain {
 		Hotel cheapestHotel = null;
 		try {
 			cheapestHotel = findCheapestHotel(startDate, endDate, type);
-			System.out.println("Cheapest best rated hotel for reward customer is " + cheapestHotel.getHotelName() + ", Rating "
+			System.out.println("Cheapest best rated hotel for "+type+" customer is " + cheapestHotel.getHotelName() + ", Rating "
 					+ cheapestHotel.getRating() + " with total rate $ " + cheapestHotel.getTotalRate());
 		} catch (ParseException e) {
 			e.printStackTrace();
