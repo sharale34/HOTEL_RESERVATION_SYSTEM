@@ -25,7 +25,7 @@ public class HotelReservationMain {
 	}
 
 	// finding cheapest hotel for a given date range
-	public static Hotel findCheapestHotel(String start, String end) throws ParseException {
+	public static Hotel findCheapestHotel(String start, String end, String type) throws ParseException {
 		Date startDate = null, endDate = null;
 		SimpleDateFormat formatter = new SimpleDateFormat("ddMMMyyyy");
 		startDate = formatter.parse(start);
@@ -43,22 +43,30 @@ public class HotelReservationMain {
 		}
 		Long weekdays = dateRange - weekends;
 		for (Hotel hotel : hotelObj.getHotelList()) {
-			Long totalRate = weekdays * hotel.getWeekDayRate() + weekends * hotel.getWeekendRate();
-			hotel.setTotalRate(totalRate);
+			if (type.toLowerCase()=="regular") {
+				Long totalRate = weekdays * hotel.getWeekDayRate() + weekends * hotel.getWeekendRate();
+				hotel.setTotalRate(totalRate);
+			}
+			else {
+				Long totalRate = weekdays * hotel.getWeekDayRateForReward() + weekends * hotel.getWeekendRateForReward();
+				hotel.setTotalRate(totalRate);
+			}
 		}
-		List<Hotel> sortedHotelListOnRate = hotelObj.getHotelList().stream()
-				.sorted(Comparator.comparing(Hotel::getTotalRate)).collect(Collectors.toList());
 		List<Hotel> sortedHotelListOnRating = hotelObj.getHotelList().stream()
 				.sorted(Comparator.comparing(Hotel::getRating)).collect(Collectors.toList());
-		Hotel cheapestHotel = sortedHotelListOnRate.get(0);
 		Hotel bestRatedHotel = sortedHotelListOnRating.get(2);
 		System.out.println("Best Rated hotel is " + bestRatedHotel.getHotelName() + ", Rating "
 				+ bestRatedHotel.getRating() + " with total rate $ " + bestRatedHotel.getTotalRate());
+		List<Hotel> sortedHotelListOnRate = hotelObj.getHotelList().stream()
+				.sorted(Comparator.comparing(Hotel::getTotalRate)).collect(Collectors.toList());
+		Hotel cheapestHotel = sortedHotelListOnRate.get(0);
 		long lowestPrice = sortedHotelListOnRate.get(0).getTotalRate();
 		double rating = sortedHotelListOnRate.get(0).getRating();
 		for (Hotel hotel : hotelObj.getHotelList()) {
 			if (hotel.getTotalRate() <= lowestPrice && hotel.getRating() > rating)
 				cheapestHotel = hotel;
+			else
+				break;
 		}
 		return cheapestHotel;
 	}
@@ -72,10 +80,12 @@ public class HotelReservationMain {
 		String startDate = sc.next();
 		System.out.println("Enter the check out date in ddMMMYYYY format");
 		String endDate = sc.next();
+		System.out.println("Enter the type of customer :");
+		String type = sc.next();
 		Hotel cheapestHotel = null;
 		try {
-			cheapestHotel = findCheapestHotel(startDate, endDate);
-			System.out.println("Cheapest hotel is " + cheapestHotel.getHotelName() + ", Rating "
+			cheapestHotel = findCheapestHotel(startDate, endDate, type);
+			System.out.println("Cheapest best rated hotel for reward customer is " + cheapestHotel.getHotelName() + ", Rating "
 					+ cheapestHotel.getRating() + " with total rate $ " + cheapestHotel.getTotalRate());
 		} catch (ParseException e) {
 			e.printStackTrace();
